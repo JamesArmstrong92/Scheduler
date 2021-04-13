@@ -12,7 +12,7 @@ export default function Show(props) {
     <h2 className="text--regular">Lydia Miller-Jones</h2>
     <section className="interviewer">
       <h4 className="text--light">Interviewer</h4>
-      <h3 className="text--regular">{props.interview.name}</h3>
+      <h3 className="text--regular">Added</h3>
     </section>
   </section>
   <section className="appointment__card-right">
