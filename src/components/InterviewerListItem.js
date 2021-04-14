@@ -8,7 +8,7 @@ export default function InterviewListItem(props) {
 
   const className = classNames({
     'interviewer-list__item': true,
-    'interviewer-list__item--selected': props.selected,
+    'interviewer-list__item--selected': props.selected
 
   })
 
