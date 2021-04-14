@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import DayList from "components/DayList"
 import Appointment from "components/Application"
 import "components/Application.scss";
@@ -7,26 +8,23 @@ import "components/Application.scss";
 
 export default function Application(props) {
 
-  
-
-  
-  const days = [
-    {
-      id: 1,
-      name: "Monday",
-      spots: 2,
-    },
-    {
-      id: 2,
-      name: "Tuesday",
-      spots: 5,
-    },
-    {
-      id: 3,
-      name: "Wednesday",
-      spots: 0,
-    },
-  ];
+  // const days = [
+  //   {
+  //     id: 1,
+  //     name: "Monday",
+  //     spots: 2,
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Tuesday",
+  //     spots: 5,
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Wednesday",
+  //     spots: 0,
+  //   },
+  // ];
 
   const appointments = [
     {
@@ -47,8 +45,24 @@ export default function Application(props) {
     }
   ];
 
-  const [day, setDay] = useState("Monday");
+  const [state, setState] = useState({
+    day: "Monday",
+    days: [],
+    // you may put the line below, but will have to remove/comment hardcoded appointments variable
+    appointments: {}
+  });
   console.log(day)
+
+
+  useEffect(() => {
+      axios.get('/api/days')
+        .then(response => {
+          console.log(response.data);
+          setDays([...response.data])
+          
+      });
+}, [])
+
 
   return (
     <main className="layout">
