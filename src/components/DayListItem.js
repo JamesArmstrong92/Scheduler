@@ -6,14 +6,13 @@ export default function DayListItem(props) {
 
   const formatSpots = function(spots) {
       
-    if (props.spots === 0) 
+    if (props.spots === 0) {
       return `no spots remaining`;
-
-    if (props.spots === 1)
+    } else if (props.spots === 1) {
       return `1 spot remaining`;
-      
-
-    return `${spots} spots remaining`;
+    } else {
+        return `${props.spots} spots remaining`;
+    }
   };
 
   const dayClassNames = classNames({
