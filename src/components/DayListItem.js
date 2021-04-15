@@ -4,16 +4,16 @@ import classNames from "classnames";
 
 export default function DayListItem(props) {
 
-  const formatSpots = function(props) {
-
-      if (props.spots > 1)
-        return `${props.spots} remaining`;
+  const formatSpots = function(spots) {
       
-      if (props.spots === 0) 
-        return `${props.spots} remaining`;
+    if (props.spots === 0) 
+      return `no spots remaining`;
 
-        return `0 spots remaining`;
-    
+    if (props.spots === 1)
+      return `1 spot remaining`;
+      
+
+    return `${spots} spots remaining`;
   };
 
   const dayClassNames = classNames({
