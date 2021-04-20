@@ -1,18 +1,22 @@
 import React from "react";
-import './DayListItem.scss'
+import "components/DayListItem.scss";
 import classNames from "classnames";
 
 export default function DayListItem(props) {
 
-  const formatSpots = function(spots) {
+  
+
+  const formatSpots = function(props) {
       
-    if (props.spots === 0) {
-      return `no spots remaining`;
-    } else if (props.spots === 1) {
-      return `1 spot remaining`;
-    } else {
-        return `${props.spots} spots remaining`;
-    }
+
+    if (props.spots === 1 ) 
+      return `${props.spots} spots remaining`;
+    
+    if (props.spots > 1) 
+      return `${props.spots} spots remaining`;
+     
+        return `no spots remaining`
+    
   };
 
   const dayClassNames = classNames({
@@ -24,7 +28,7 @@ export default function DayListItem(props) {
   });
 
   return (
-    <li className={dayClassNames} onClick={() => props.setDay(props.name)}>
+    <li className={dayClassNames} onClick={() => props.setDay(props.name)} data-testid="day">
       <h2 className="text--regular">{props.name}</h2>
       <h3 className="text--light">{formatSpots(props)}</h3>
     </li>
