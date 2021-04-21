@@ -11,108 +11,100 @@ import "./styles.scss";
 
 
 
+//Renders appointment view, conditionally on mode set by click events
 export default function Appointment(props) {
-  
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
-  const CREATE ="CREATE";
-  const SAVING ="SAVING";
-  const CONFIRM="CONFIRM";
+  const CREATE = "CREATE";
+  const SAVING = "SAVING";
+  const CONFIRM = "CONFIRM";
   const DELETE = "DELETE";
-  const EDIT = "EDIT";
+  const EDIT = "EDIT"
   const ERROR_SAVE = "ERROR_SAVE";
-  const ERROR_DELETE  = "ERROR_DELETE ";
+  const ERROR_DELETE = "ERROR_DELETE";
 
   const { mode, transition, back } = useVisualMode(
-    props.interview ? Show  : Empty 
-    );
+    props.interview ? SHOW : EMPTY
+  );
 
-
-    function save(name, interviewer) {
-      const interview = {
-        student: name,
-        interviewer
-      };
-  
-      transition(SAVING);
-      props.bookInterview(props.id, interview)
-        .then(() => {
-          transition(SHOW)
-        })
-        .catch(err => {
-          transition(ERROR_SAVE, true)
-        })
+  //creates new interview with passed in stuedent name and interviewer, transitions form and saves to api DB
+  function save(name, interviewer) {
+    const interview = {
+      student: name,
+      interviewer
     };
-  
+
+    transition(SAVING);
+    props.bookInterview(props.id, interview)
+      .then(() => {
+        transition(SHOW)
+      })
+      .catch(err => {
+        transition(ERROR_SAVE, true)
+      })
+  };
+
+  //Removes interview from API DB when called on cofirm
+  function destroy(id) {
+    transition(DELETE, true)
+    props.cancelInterview(props.id)
+      .then(() => {
+        transition(EMPTY);
+      })
+      .catch(err => {
+        transition(ERROR_DELETE, true);
+      })
+  };
+
+
+  return (<article className="appointment" data-testid="appointment">
+
+    <Header time={props.time} />
+    {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
     
-    function destroy(id) {
-      transition(DELETE, true)
-      props.cancelInterview(props.id)
-        .then(() => {
-          transition(EMPTY);
-        })
-        .catch(err => {
-          transition(ERROR_DELETE, true);
-        })
-    };
-  
-  
-  return <article className="appointment">
-        <Header 
-        time={props.time} />
-        {mode === EMPTY  &&  
-        <Empty 
-        onAdd={event => transition(CREATE)} />}
-        {mode === SHOW   && 
-        (<Show 
-               student      ={props.interview.student} 
-               interviewer  ={props.interview.interviewer}
-               onDelete={() => transition(CONFIRM)}
-               onEdit={()   => transition(EDIT)}
-               />)}
+    {mode === SHOW && (
+      <Show
+        student={props.interview.student}
+        id={props.id}
+        interviewer={props.interview.interviewer}
+        onDelete={() => transition(CONFIRM)}
+        onEdit={() => transition(EDIT)}
+      />
+    )}
 
-        {mode === CREATE && 
-        (<Form 
-          interviewers={props.interviewers} 
-          onSave      = {save} 
-          onCancel    = {back}
-          />)}
-        {mode === SAVING && 
-        <Status
-                message={`Saving...`} 
-          />}
-         {mode === CONFIRM && 
-         <Confirm
-            message={`Please confirm?`}
-            onCancel={back}
-            onConfirm={destroy} 
-            />}
-        {mode === DELETE && 
-        <Status
-        message={`Deleting...`} 
-        />}
-        {mode === EDIT && 
-        <Form
-          onCancel={back}
-          onSave={save}
-          interviewers={props.interviewers}
-          name={props.interview.student}
-          interviewer={props.interview.interviewer.id}
-        />}
-         {mode === ERROR_SAVE && (
-         < Error
-            onClose={back}
-            message={`Cannot SAVE - Cannot connect to server...`}
+    {mode === CREATE && < Form
+      onCancel={back}
+      interviewers={props.interviewers}
+      onSave={save}
+    />}
+
+    {mode === SAVING && < Status
+      message={`Saving...`} />}
+
+    {mode === CONFIRM && < Confirm
+      message={`Are you sure?`}
+      onCancel={back}
+      onConfirm={destroy} />}
+
+    {mode === DELETE && < Status
+      message={`Deleting...`} />}
+
+    {mode === EDIT && < Form
+      onCancel={back}
+      onSave={save}
+      interviewers={props.interviewers}
+      name={props.interview.student}
+      interviewer={props.interview.interviewer.id}
+    />}
+
+    {mode === ERROR_SAVE && (< Error
+      onClose={back}
+      message={`Cannot SAVE - Cannot connect to server...`}
     />)}
-    {mode === ERROR_DELETE && 
-    (< Error
+
+    {mode === ERROR_DELETE && (< Error
       onClose={back}
       message={`Cannot DELETE - Cannot connect to server... `}
     />)}
-
-
-
-
-  </article>
-  
-}
+  </article>);
+};
