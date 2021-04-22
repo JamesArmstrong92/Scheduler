@@ -1,3 +1,4 @@
+import React from 'react';
 import axios from 'axios';
 import { useEffect, useState } from "react";
 
@@ -12,8 +13,8 @@ export default function useApplicationData() {
   
   useEffect(() => {
     Promise.all([
-      axios.get('/api/days'),
       axios.get('/api/appointments'),
+      axios.get('/api/days'),
       axios.get('/api/interviewers')
     ]).then((all) => {
       setState(prev => ({ ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data }))
@@ -22,13 +23,13 @@ export default function useApplicationData() {
 
 
   
-  function getZero(day, appointments) {
+  function zeroDay(day, appointments) {
     const output = 0;
 
     for (const val of day.appointments) {
       const newAppointment = appointments[val];
       if (!newAppointment.interview) {
-        output++
+        output = output + 1
       }
     }
     return output;
@@ -37,8 +38,8 @@ export default function useApplicationData() {
   
   function updateSpots(dayName, days, appointments) {
     const spread = [...days];
-    const nulls = getZero(day, appointments);
-    const day = spread.find(itmem => itmem.name === dayName);
+    const nulls = zeroDay(day, appointments);
+    const day = spread.find(item => item.name === dayName);
     day.spots = nulls;
 
     return spread;
@@ -63,7 +64,9 @@ export default function useApplicationData() {
 
     const days = updateSpots(state.day, state.days, appointments);
 
-    return axios.put(`/api/appointments/${id}`, { interview })
+    return axios.put(`/api/appointments/${id}`, { 
+      interview 
+    })
       .then(() => {
         setState({
           ...state,
