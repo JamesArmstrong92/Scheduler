@@ -1,6 +1,4 @@
 import React from "react";
-import "components/Appointments/styles.scss";
-
 
 
 export default function Show(props) {
@@ -12,7 +10,7 @@ export default function Show(props) {
     <h2 className="text--regular">{props.student}</h2>
     <section className="interviewer">
       <h4 className="text--light">Interviewer</h4>
-      <h3 className="text--regular">{props.interviewer.name}</h3>
+      <h3 className="text--regular">Sandy</h3>
     </section>
   </section>
   <section className="appointment__card-right">
@@ -21,16 +19,15 @@ export default function Show(props) {
         className="appointment__actions-button"
         src="images/edit.png"
         alt="Edit"
-        onclick={props.onEdit}
+        onClick={props.onEdit}
       />
       <img
         className="appointment__actions-button"
         src="images/trash.png"
         alt="Delete"
-        onclick={props.onDelete}
+        onClick={props.onDelete}
       />
     </section>
   </section>
 </main>)
-  
 }

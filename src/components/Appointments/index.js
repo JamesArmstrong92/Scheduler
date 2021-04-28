@@ -1,17 +1,15 @@
 import React from "react";
-import Header from './header'
-import Show from './show'
-import Empty from './empty'
+import "./styles.scss";
+import Header from "./header";
+import Show from "./show";
+import Empty from "./empty";
 import Form from "./form";
 import Status from "./status"
 import Confirm from "./confirm";
 import Error from "./error";
-import useVisualMode from 'hooks/useVisualMode'
-import "./styles.scss";
+import useVisualMode from "hooks/useVisualMode";
 
 
-
-//Renders appointment view, conditionally on mode set by click events
 export default function Appointment(props) {
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
@@ -27,25 +25,7 @@ export default function Appointment(props) {
     props.interview ? SHOW : EMPTY
   );
 
-  //creates new interview with passed in stuedent name and interviewer, transitions form and saves to api DB
-  function save(name, interviewer) {
-    const interview = {
-      student: name,
-      interviewer
-    };
-
-    transition(SAVING);
-    props.bookInterview(props.id, interview)
-      .then(() => {
-        transition(SHOW)
-      })
-      .catch(err => {
-        transition(ERROR_SAVE, true)
-      })
-  };
-
-  //Removes interview from API DB when called on cofirm
-  function destroy(id) {
+  function destroy(val) {
     transition(DELETE, true)
     props.cancelInterview(props.id)
       .then(() => {
@@ -55,14 +35,35 @@ export default function Appointment(props) {
         transition(ERROR_DELETE, true);
       })
   };
+  
+  function save(name, interviewer) {
+    const interview = {
+      student: name,
+      interviewer
+    };
+    
+    transition(SAVING);
+    props.bookInterview(props.id, interview)
+    .then(() => {
+      transition(SHOW)
+    })
+    .catch(err => {
+      transition(ERROR_SAVE, true)
+    })
+  };
+  
+  
 
 
   return (<article className="appointment" data-testid="appointment">
 
     <Header time={props.time} />
-    {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
+    {mode === EMPTY && 
+
+    <Empty onAdd={() => transition(CREATE)} />}
     
     {mode === SHOW && (
+      
       <Show
         student={props.interview.student}
         id={props.id}
@@ -72,24 +73,34 @@ export default function Appointment(props) {
       />
     )}
 
-    {mode === CREATE && < Form
+    {mode === CREATE && 
+    
+    < Form
       onCancel={back}
       interviewers={props.interviewers}
       onSave={save}
     />}
 
-    {mode === SAVING && < Status
-      message={`Saving...`} />}
+    {mode === SAVING && 
+    
+    < Status
+      message={`Saving... please wait`} />}
 
-    {mode === CONFIRM && < Confirm
+    {mode === CONFIRM && 
+    
+    < Confirm
       message={`Are you sure?`}
       onCancel={back}
       onConfirm={destroy} />}
 
-    {mode === DELETE && < Status
-      message={`Deleting...`} />}
+    {mode === DELETE && 
+    
+    < Status
+      message={`Deleting... please wait`} />}
 
-    {mode === EDIT && < Form
+    {mode === EDIT && 
+    
+    < Form
       onCancel={back}
       onSave={save}
       interviewers={props.interviewers}
@@ -97,12 +108,15 @@ export default function Appointment(props) {
       interviewer={props.interview.interviewer.id}
     />}
 
-    {mode === ERROR_SAVE && (< Error
+    {mode === ERROR_SAVE && 
+    
+    (< Error
       onClose={back}
       message={`Cannot SAVE - Cannot connect to server...`}
     />)}
 
-    {mode === ERROR_DELETE && (< Error
+    {mode === ERROR_DELETE && 
+    (< Error
       onClose={back}
       message={`Cannot DELETE - Cannot connect to server... `}
     />)}
