@@ -21,4 +21,5 @@ npm test
 ```sh
 npm run storybook
 ```
-s1 photo![image](https://user-images.githubusercontent.com/77024430/117029980-2ee58900-accd-11eb-946a-3a1e788bcd9e.png)
+grabs 2021-05-04 at 11.41.28 AM![image](https://user-images.githubusercontent.com/77024430/117030533-bf23ce00-accd-11eb-96d4-787ee58ebf4f.png)
+
