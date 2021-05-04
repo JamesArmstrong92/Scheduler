@@ -5,12 +5,11 @@ import Appointment from "components/Appointments";
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
 import useApplicationData from "hooks/useApplicationData";
 
-//Main rendering component of application
+
 export default function Application(props) {
   const { state, setDay, bookInterview, cancelInterview } = useApplicationData();
 
-  /*Vars get appointments and interviews from state, populates Appointment components with data in schedule,
-  schedule used in "schedule" section of Application. */
+  
   const dailyAppointments = getAppointmentsForDay(state, state.day);
   const dailyInterviewers = getInterviewersForDay(state, state.day);
   const schedule = dailyAppointments.map((appointment) => {

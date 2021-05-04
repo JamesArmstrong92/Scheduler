@@ -1,4 +1,3 @@
-
 export function getAppointmentsForDay (state, day) {
   
   const newDay = state.days
